@@ -1,0 +1,42 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Transform: AWS::Serverless-2016-10-31
+Description: Serverless patterns - Lambda to SQS
+
+Globals:
+  Function:
+    Runtime: nodejs14.x
+    Timeout: 10
+    Handler: index.handler
+    Environment:
+      Variables:
+        queueUrl: !Ref SqsQueue
+
+Resources:
+  SqsQueue:
+    Type: AWS::SQS::Queue
+
+  FirstLambda:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: ./
+      Handler: index.firstHandler
+      Events:
+        ApiEvent:
+          Type: Api
+          Properties:
+            Method: POST
+            Path: /ld/sqs/ld
+      Policies:
+        - SQSSendMessagePolicy:
+            QueueName: !GetAtt SqsQueue.QueueName
+  SecondLambda:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: ./
+      Handler: index.secondHandler
+      Events:
+        SQSEvent:
+          Type: SQS
+          Properties:
+            Queue: !GetAtt SqsQueue.Arn
+            BatchSize: 1
