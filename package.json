@@ -1,0 +1,12 @@
+{
+  "name": "api-lambda-sqs-lambda",
+  "version": "1.0.0",
+  "description": "CloudFormation Stack to deploy a lambda triggered by ApiGateway to send a message to sqs which in turn triggers another lambda",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "Aneesh",
+  "license": "ISC"
+}
